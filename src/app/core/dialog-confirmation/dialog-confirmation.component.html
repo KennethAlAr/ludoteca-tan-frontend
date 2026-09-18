@@ -1,0 +1,10 @@
+<div class="container">
+    <h1>{{title()}}</h1>
+    <div [innerHTML]="description()" class="description"></div>
+
+    <div class="buttons">
+        <button mat-stroked-button (click)="onClose()">No</button>
+        <!-- He añadido una clase "yes-icon" para poder ponerle el color de la variable --mat-sys-error. -->
+        <button mat-flat-button class="yes-button" (click)="onClose(true)">Sí</button>
+    </div>
+</div>    

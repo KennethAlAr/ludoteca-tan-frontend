@@ -1,0 +1,22 @@
+.container {
+    min-width: 350px;
+    max-width: 500px;
+    padding: 20px;
+
+    .description {
+      margin-bottom: 20px;
+    }
+
+    .buttons {
+      text-align: right;
+
+      button {
+          margin-left: 10px;
+      }
+    }
+    
+    /* He añadido color a la clase .yes-button porque el tema utilizado no le aplica ningún color y me parecía interesante verlo diferente */
+    .yes-button {
+      background-color: var(--mat-sys-error);
+    }
+}    
