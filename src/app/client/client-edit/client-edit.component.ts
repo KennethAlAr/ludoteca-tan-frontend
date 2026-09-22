@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CategoryService } from '../category.service';
-import { Category } from '../model/Category';
+import { ClientService } from '../client.service';
+import { Client } from '../model/Client';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -9,25 +9,25 @@ import { MatButtonModule } from '@angular/material/button';
 import { validateFields } from '../../core/helpers/validation.helper';
 
 @Component({
-    selector: 'app-category-edit',
+    selector: 'app-client-edit',
     standalone: true,
     imports: [FormsModule, ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule ],
-    templateUrl: './category-edit.component.html',
-    styleUrl: './category-edit.component.scss'
+    templateUrl: './client-edit.component.html',
+    styleUrl: './client-edit.component.scss'
 })
-export class CategoryEditComponent implements OnInit {
-    protected readonly dialogRef = inject(MatDialogRef<CategoryEditComponent>);
-    protected readonly data = inject(MAT_DIALOG_DATA) as { category: Category };
-    protected readonly categoryService = inject(CategoryService);
+export class ClientEditComponent implements OnInit {
+    protected readonly dialogRef = inject(MatDialogRef<ClientEditComponent>);
+    protected readonly data = inject(MAT_DIALOG_DATA) as { client: Client };
+    protected readonly clientService = inject(ClientService);
 
     protected readonly id = signal<number | null>(null);
     protected readonly name = signal<string | null>(null);
 
     ngOnInit(): void {
-        this.loadFormData(this.data.category ?? null);
+        this.loadFormData(this.data.client ?? null);
     }
 
-    loadFormData(initialData: Category | null): void {
+    loadFormData(initialData: Client | null): void {
         this.id.set(initialData?.id ?? null);
         this.name.set(initialData?.name ?? null);
     }
@@ -43,8 +43,8 @@ export class CategoryEditComponent implements OnInit {
             return;
         }
 
-        const category = { id, name } as Category;
-        this.categoryService.saveCategory(category).subscribe(() => {
+        const client = { id, name } as Client;
+        this.clientService.saveClient(client).subscribe(() => {
             this.dialogRef.close(true);
         });
     }

@@ -12,69 +12,70 @@ import { CategoryEditComponent } from '../category-edit/category-edit.component'
 import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dialog-confirmation.component';
 
 @Component({
-    selector: 'app-category-list',
-    standalone: true,
-    imports: [
-        MatButtonModule,
-        MatIconModule,
-        MatTableModule,
-        CommonModule,
-        MatDialogModule
-    ],
-    templateUrl: './category-list.component.html',
-    styleUrl: './category-list.component.scss'
+  selector: 'app-category-list',
+  standalone: true,
+  imports: [
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    CommonModule,
+    MatDialogModule
+  ],
+  templateUrl: './category-list.component.html',
+  styleUrl: './category-list.component.scss'
 })
 export class CategoryListComponent implements OnInit{
 
-    dataSource = new MatTableDataSource<Category>();
-    displayedColumns: string[] = ['id', 'name', 'action'];
+  dataSource = new MatTableDataSource<Category>();
+  displayedColumns: string[] = ['id', 'name', 'action'];
 
-    protected readonly categoryService = inject(CategoryService);
-    protected readonly dialog = inject(MatDialog);
+  protected readonly categoryService = inject(CategoryService);
+  protected readonly dialog = inject(MatDialog);
 
-    loadData(): void {
-      this.categoryService.getCategories().subscribe(
-        categories => this.dataSource.data = categories
-      );
-    }
+  loadData(): void {
+    this.categoryService.getCategories().subscribe(
+      categories => this.dataSource.data = categories
+    );
+  }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+    this.loadData();
+  }
+
+  createCategory() {    
+    const dialogRef = this.dialog.open(CategoryEditComponent, {
+      data: {}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(!result) return;
       this.loadData();
-    }
+    });    
+  }
 
-    createCategory() {    
-      const dialogRef = this.dialog.open(CategoryEditComponent, {
-        data: {}
-      });
+  editCategory(category: Category) {
+    const dialogRef = this.dialog.open(CategoryEditComponent, {
+      data: { category }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if(!result) return;
-        this.loadData();
-      });    
-    }
+    dialogRef.afterClosed().subscribe(result => {
+      if(!result) return;
+      this.loadData();
+    });    
+  }
 
-    editCategory(category: Category) {
-      const dialogRef = this.dialog.open(CategoryEditComponent, {
-        data: { category }
-      });
+  deleteCategory(category: Category) {    
+    const dialogRef = this.dialog.open(DialogConfirmationComponent, {
+      data: { title: "Eliminar categoría", description: "Atención si borra la categoría se perderán sus datos.<br> ¿Desea eliminar la categoría?" }
+    });
 
-      dialogRef.afterClosed().subscribe(result => {
-        if(!result) return;
-        this.loadData();
-      });    
-    }
-
-    deleteCategory(category: Category) {    
-      const dialogRef = this.dialog.open(DialogConfirmationComponent, {
-        data: { title: "Eliminar categoría", description: "Atención si borra la categoría se perderán sus datos.<br> ¿Desea eliminar la categoría?" }
-      });
-
-      dialogRef.afterClosed().subscribe(result => {
-        if (result) {
-          this.categoryService.deleteCategory(category.id).subscribe(result => {
-            this.loadData();
-          }); 
-        }
-      });
-    }  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.categoryService.deleteCategory(category.id).subscribe(result => {
+          this.loadData();
+        }); 
+      }
+    });
+  }  
 }
+                                                                                                                                                
