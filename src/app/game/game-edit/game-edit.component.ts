@@ -62,8 +62,8 @@ export class GameEditComponent implements OnInit {
         const categoryId = this.categoryId(); 
         const authorId = this.authorId(); 
 
-        const requiredFields = ["title", "age", "categoryId", "authorId"] as const
-        const data = { title, age, categoryId, authorId }
+        const requiredFields = ["title", "age", "categoryId", "authorId"] as const;
+        const data = { title, age, categoryId, authorId };
 
         if (!validateFields(data, requiredFields)) {
             return;

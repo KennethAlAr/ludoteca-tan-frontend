@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { AuthorEditComponent } from '../author-edit/author-edit.component';
-import { AuthorService } from '../author.service';
-import { Author } from '../model/Author';
+import { ReservationEditComponent } from '../reservation-edit/reservation-edit.component';
+import { ReservationService } from '../reservation.service';
+import { Reservation } from '../model/Reservation';
 import { Pageable } from '../../core/model/page/Pageable';
 import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dialog-confirmation.component';
 import { CommonModule } from '@angular/common';
@@ -13,24 +13,24 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-author-list',
+  selector: 'app-reservation-list',
   standalone: true,
   imports: [MatButtonModule, MatIconModule, MatTableModule, MatPaginatorModule, CommonModule],
-  templateUrl: './author-list.component.html',
-  styleUrl: './author-list.component.scss',
+  templateUrl: './reservation-list.component.html',
+  styleUrl: './reservation-list.component.scss',
 })
-export class AuthorListComponent implements OnInit {
+export class ReservationListComponent implements OnInit {
   pageNumber: number = 0;
   pageSize: number = 5;
   totalElements: number = 0;
 
-  dataSource = new MatTableDataSource<Author>();
-  displayedColumns: string[] = ['id', 'name', 'nationality', 'action'];
+  dataSource = new MatTableDataSource<Reservation>();
+  displayedColumns: string[] = ['id', 'game', 'client', 'startDate', 'endDate', 'action'];
 
-  constructor(private authorService: AuthorService, public dialog: MatDialog) {}
+  constructor(private reservationService: ReservationService, public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    this.loadPage();
+      this.loadPage();
   }
 
   loadPage(event?: PageEvent) {
@@ -50,16 +50,16 @@ export class AuthorListComponent implements OnInit {
       pageable.pageNumber = event.pageIndex;
     }
 
-    this.authorService.getAuthors(pageable).subscribe((data) => {
+    this.reservationService.getReservations(pageable).subscribe((data) => {
       this.dataSource.data = data.content;
       this.pageNumber = data.pageable.pageNumber;
-      this.pageSize = data.pageable.pageSize;
+      this.pageSize = pageable.pageSize;
       this.totalElements = data.totalElements;
     });
   }
 
-  createAuthor() {
-    const dialogRef = this.dialog.open(AuthorEditComponent, {
+  createReservation() {
+    const dialogRef = this.dialog.open(ReservationEditComponent, {
       data: {},
     });
 
@@ -68,9 +68,9 @@ export class AuthorListComponent implements OnInit {
     });
   }
 
-  editAuthor(author: Author) {
-    const dialogRef = this.dialog.open(AuthorEditComponent, {
-      data: { author: author },
+  editReservation(reservation: Reservation) {
+    const dialogRef = this.dialog.open(ReservationEditComponent, {
+      data: { reservation: reservation },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -78,17 +78,17 @@ export class AuthorListComponent implements OnInit {
     });
   }
 
-  deleteAuthor(author: Author) {
+  deleteReservation(reservation: Reservation) {
     const dialogRef = this.dialog.open(DialogConfirmationComponent, {
       data: {
-        title: 'Eliminar autor',
-        description: 'Atención si borra el autor se perderán sus datos.<br> ¿Desea eliminar el autor?',
+        title: 'Eliminar reserva',
+        description: `Atención si borra la reserva se perderán sus datos.<br> ¿Desea eliminar la reserva?`,
       },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
       if (result) {
-        this.authorService.deleteAuthor(author.id).subscribe((result) => {
+        this.reservationService.deleteReservation(reservation.id).subscribe((result) => {
           this.ngOnInit();
         });
       }
