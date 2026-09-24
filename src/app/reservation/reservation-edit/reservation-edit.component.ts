@@ -13,17 +13,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { validateFields } from '../../core/helpers/validation.helper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { DateAdapter, NativeDateAdapter, provideNativeDateAdapter } from '@angular/material/core';
+import { DateAdapter, provideNativeDateAdapter } from '@angular/material/core';
+import { SpanishDateAdapter } from '../../core/adapters/spanish-date.adapter';
+import { formatLocalDate, parseLocalDate } from '../../core/helpers/date-converter.helper';
 
-class SpanishDateAdapter extends NativeDateAdapter {
-  override format(date: Date): string {
-    return [
-      String(date.getDate()).padStart(2, '0'),
-      String(date.getMonth() + 1).padStart(2, '0'),
-      date.getFullYear()
-    ].join('/');
-  }
-}
 
 @Component({
   selector: 'app-reservation-edit',
@@ -76,8 +69,8 @@ export class ReservationEditComponent implements OnInit {
       this.clientId.set(initialData?.client?.id ?? null);
     });
 
-    this.startDate.set(initialData?.startDate ? this.parseLocalDate(initialData.startDate) : null);
-    this.endDate.set(initialData?.endDate ? this.parseLocalDate(initialData.endDate) : null);
+    this.startDate.set(initialData?.startDate ? parseLocalDate(initialData.startDate) : null);
+    this.endDate.set(initialData?.endDate ? parseLocalDate(initialData.endDate) : null);
   }
 
   onSave() {
@@ -98,8 +91,8 @@ export class ReservationEditComponent implements OnInit {
       id,
       game: this.games().find(g => g.id === gameId) ?? null,
       client: this.clients().find(c => c.id === clientId) ?? null,
-      startDate: this.formatLocalDate(startDate),
-      endDate: this.formatLocalDate(endDate),
+      startDate: formatLocalDate(startDate),
+      endDate: formatLocalDate(endDate),
     } as Reservation;
     
     this.reservationService.saveReservation(reservation).subscribe(() => {
@@ -109,19 +102,5 @@ export class ReservationEditComponent implements OnInit {
 
   onClose() {
     this.dialogRef.close();
-  }
-
-  private parseLocalDate(value: string): Date {
-    const [year, month, day] = value.split('-').map(Number);
-
-    return new Date(year, month - 1, day);
-  }
-
-  private formatLocalDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-
-    return `${year}-${month}-${day}`;
   }
 }

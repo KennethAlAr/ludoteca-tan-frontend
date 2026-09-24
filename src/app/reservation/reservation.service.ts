@@ -13,8 +13,8 @@ export class ReservationService {
 
   private baseUrl = 'http://localhost:8080/reservation';
 
-  getReservations(pageable: Pageable): Observable<PaginatedData<Reservation>> {
-    return this.http.post<PaginatedData<Reservation>>(this.baseUrl, { pageable: pageable });
+  getReservations(search: { pageable: Pageable, gameId: number | null, clientId: number | null, date: string | null }): Observable<PaginatedData<Reservation>> {
+    return this.http.post<PaginatedData<Reservation>>(this.baseUrl, search);
   }
 
   saveReservation(reservation: Reservation): Observable<Reservation> {
