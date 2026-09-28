@@ -52,6 +52,9 @@ export class ReservationEditComponent implements OnInit {
   protected readonly gameService = inject(GameService);
   protected readonly clientService = inject(ClientService);
 
+  protected readonly dateErrorMessage = signal<string | null>(null);
+  protected readonly conflictErrorMessage = signal<string | null>(null);
+
   ngOnInit(): void {
     this.loadFormData(this.data.reservation ?? null);
   }
@@ -74,6 +77,9 @@ export class ReservationEditComponent implements OnInit {
   }
 
   onSave() {
+    this.dateErrorMessage.set(null);
+    this.conflictErrorMessage.set(null);
+
     const id = this.id();
     const gameId = this.gameId();
     const clientId = this.clientId();
@@ -87,6 +93,10 @@ export class ReservationEditComponent implements OnInit {
       return;
     }
 
+    if (!this.validateDates(startDate, endDate)) {
+      return
+    }
+
     const reservation = {
       id,
       game: this.games().find(g => g.id === gameId) ?? null,
@@ -95,12 +105,33 @@ export class ReservationEditComponent implements OnInit {
       endDate: formatLocalDate(endDate),
     } as Reservation;
     
-    this.reservationService.saveReservation(reservation).subscribe(() => {
-      this.dialogRef.close(true);
+    this.reservationService.saveReservation(reservation).subscribe({
+      next: () => {
+        this.dialogRef.close(true);
+      }, error: (error) => {
+        if (error.status === 409) {
+          this.conflictErrorMessage.set("El juego o el cliente ya tienen una reserva activa durante las fechas seleccionadas.");
+        }
+      }
     });
   }
 
   onClose() {
     this.dialogRef.close();
+  }
+
+  private validateDates(startDate: Date, endDate: Date): boolean {
+    if (startDate > endDate) {
+      this.dateErrorMessage.set("La fecha de inicio no puede ser posterior a la fecha de devolución.");
+      return false;
+    }
+    
+    const maxEndDate = new Date(startDate);
+    maxEndDate.setDate(maxEndDate.getDate() + 14);
+    if (endDate > maxEndDate) {
+      this.dateErrorMessage.set("La fecha de devolución no puede ser superior a catorce días desde la fecha de inicio.");
+      return false;
+    }
+    return true;
   }
 }

@@ -26,4 +26,12 @@
             min-width: 0;
         }
     }
+
+    .custom-error {
+        color: var(--mat-sys-error);
+        font-size: 12px;
+        margin-top: -16px;
+        margin-bottom: 16px;
+        padding-left: 16px;
+    }
 }
