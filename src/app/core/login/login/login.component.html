@@ -1,0 +1,22 @@
+<div class="container">
+
+    <h1>Log in</h1>
+
+    <form>
+        <mat-form-field>
+            <mat-label>Nombre de usuario</mat-label>
+            <input type="text" matInput placeholder="Nombre de usuario" [(ngModel)]="name" name="name" required>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Contraseña</mat-label>
+            <input type="password" matInput placeholder="Contraseña" [(ngModel)]="password" name="password" required>
+            <mat-error>La contraseña no puede estar vacía</mat-error>
+        </mat-form-field>
+    </form>
+
+    <div class="buttons">
+        <button mat-stroked-button (click)="onClose()">Cerrar</button>
+        <button mat-flat-button color="primary" (click)="onLogin()">Log in</button>
+    </div>
+</div>
