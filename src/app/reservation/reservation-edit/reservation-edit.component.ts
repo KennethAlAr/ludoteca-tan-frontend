@@ -53,7 +53,8 @@ export class ReservationEditComponent implements OnInit {
   protected readonly clientService = inject(ClientService);
 
   protected readonly dateErrorMessage = signal<string | null>(null);
-  protected readonly conflictErrorMessage = signal<string | null>(null);
+  protected readonly gameErrorMessage = signal<string | null>(null);
+  protected readonly clientErrorMessage = signal<string | null>(null);
 
   ngOnInit(): void {
     this.loadFormData(this.data.reservation ?? null);
@@ -78,7 +79,8 @@ export class ReservationEditComponent implements OnInit {
 
   onSave() {
     this.dateErrorMessage.set(null);
-    this.conflictErrorMessage.set(null);
+    this.gameErrorMessage.set(null);
+    this.clientErrorMessage.set(null);
 
     const id = this.id();
     const gameId = this.gameId();
@@ -110,7 +112,12 @@ export class ReservationEditComponent implements OnInit {
         this.dialogRef.close(true);
       }, error: (error) => {
         if (error.status === 409) {
-          this.conflictErrorMessage.set("El juego o el cliente ya tienen una reserva activa durante las fechas seleccionadas.");
+          if (error.error?.message.includes("juego")) {
+            this.gameErrorMessage.set("El juego ya tiene una reserva activa durante las fechas seleccionadas.");
+          }
+          if (error.error?.message.includes("cliente")) {
+            this.clientErrorMessage.set("El cliente ya tiene una reserva activa durante las fechas seleccionadas.");
+          }
         }
       }
     });

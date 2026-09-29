@@ -20,6 +20,9 @@
             </mat-select>
             <mat-error>El juego no puede estar vacío.</mat-error>            
         </mat-form-field>
+        @if (gameErrorMessage()) {
+            <div class="custom-error">{{gameErrorMessage()}}</div>
+        }
 
         <mat-form-field>
             <mat-label>Cliente</mat-label>
@@ -30,8 +33,8 @@
             </mat-select>
             <mat-error>El cliente no puede estar vacío.</mat-error>
         </mat-form-field>
-        @if (conflictErrorMessage()) {
-            <div class="custom-error">{{conflictErrorMessage()}}</div>
+        @if (clientErrorMessage()) {
+            <div class="custom-error">{{clientErrorMessage()}}</div>
         }
         
         <div class="date-fields">
