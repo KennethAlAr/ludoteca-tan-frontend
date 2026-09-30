@@ -10,6 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { inject } from '@angular/core';
 import { ClientEditComponent } from '../client-edit/client-edit.component';
 import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dialog-confirmation.component';
+import { LoginService } from '../../core/login/login.service'
 
 @Component({
     selector: 'app-client-list',
@@ -31,6 +32,7 @@ export class ClientListComponent implements OnInit{
 
     protected readonly clientService = inject(ClientService);
     protected readonly dialog = inject(MatDialog);
+    protected readonly loginService = inject(LoginService);
 
     loadData(): void {
         this.clientService.getClients().subscribe(

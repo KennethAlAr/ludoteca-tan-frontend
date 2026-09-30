@@ -1,5 +1,5 @@
 import {CommonModule} from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -23,11 +23,16 @@ import { MatButtonModule } from '@angular/material/button';
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  protected readonly categoryService = inject(LoginService);
+  protected readonly loginService = inject(LoginService);
   protected readonly dialog = inject(MatDialog);
 
   login() {
     const dialogRef = this.dialog.open(LoginComponent);
   }
-  
+
+  logout() {
+    localStorage.removeItem('token');
+    this.loginService.updateAuthState();
+    this.loginService.updateUserName();
+  }
 }

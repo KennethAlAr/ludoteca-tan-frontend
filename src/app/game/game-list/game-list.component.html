@@ -32,13 +32,18 @@
 
     <div class="game-list">
         @for (game of games(); track game.id) {
-            <app-game-item (click)="editGame(game)" [game]="game" />
+            @if (loginService.isAdmin()){
+                <app-game-item (click)="editGame(game)" [game]="game" />
+            } @else {
+                <app-game-item [game]="game" />
+            }
         }
     </div>
-
-    <div class="buttons">
-        <button mat-flat-button color="primary" (click)="createGame()">
-            Nuevo juego
-        </button>
-    </div>
+    @if (loginService.isAdmin()){
+        <div class="buttons">
+            <button mat-flat-button color="primary" (click)="createGame()">
+                Nuevo juego
+            </button>
+        </div>
+    }
 </div>

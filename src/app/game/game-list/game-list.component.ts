@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { GameItemComponent } from './game-item/game-item.component';
+import { LoginService } from '../../core/login/login.service';
 
 @Component({
     selector: 'app-game-list',
@@ -41,6 +42,7 @@ export class GameListComponent implements OnInit {
     protected readonly gameService = inject(GameService);
     protected readonly categoryService = inject(CategoryService);
     protected readonly dialog = inject(MatDialog);
+    protected readonly loginService = inject(LoginService);
 
     ngOnInit(): void {
         this.gameService.getGames().subscribe((games) => this.games.set(games));

@@ -23,6 +23,7 @@ import { formatLocalDate } from '../../core/helpers/date-converter.helper';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { DateAdapter, provideNativeDateAdapter } from '@angular/material/core';
 import { SpanishDateAdapter } from '../../core/adapters/spanish-date.adapter';
+import { LoginService } from '../../core/login/login.service'
 
 @Component({
   selector: 'app-reservation-list',
@@ -64,6 +65,7 @@ export class ReservationListComponent implements OnInit {
   protected readonly gameService = inject(GameService);
   protected readonly clientService = inject(ClientService);
   protected readonly dialog = inject(MatDialog);
+  protected readonly loginService = inject(LoginService);
 
   ngOnInit(): void {
     this.gameService.getGames().subscribe((games) => this.games.set(games));

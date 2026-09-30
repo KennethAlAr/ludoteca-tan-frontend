@@ -10,6 +10,7 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { inject } from '@angular/core';
 import { CategoryEditComponent } from '../category-edit/category-edit.component';
 import { DialogConfirmationComponent } from '../../core/dialog-confirmation/dialog-confirmation.component';
+import { LoginService } from '../../core/login/login.service';
 
 @Component({
   selector: 'app-category-list',
@@ -31,6 +32,7 @@ export class CategoryListComponent implements OnInit{
 
   protected readonly categoryService = inject(CategoryService);
   protected readonly dialog = inject(MatDialog);
+  protected readonly loginService = inject(LoginService);
 
   loadData(): void {
     this.categoryService.getCategories().subscribe(

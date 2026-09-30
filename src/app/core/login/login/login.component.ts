@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LoginService } from '../login.service';
 import { Login } from '../model/Login';
@@ -22,8 +22,10 @@ export class LoginComponent {
 
   protected readonly name = signal<string | null>(null);
   protected readonly password = signal<string | null>(null);
+  protected readonly loginErrorMessage = signal<string | null>(null);
 
   onLogin() {
+    this.loginErrorMessage.set(null);
     const name = this.name();
     const password = this.password();
 
@@ -35,8 +37,19 @@ export class LoginComponent {
     }
 
     const login = { name, password } as Login;
-    this.loginService.login(login).subscribe(() => {
-      this.dialogRef.close(true);
+
+    this.loginService.login(login).subscribe({
+      next: (response) => {
+        localStorage.setItem('token', response.token);
+        this.loginService.updateAuthState();
+        this.loginService.updateUserName();
+        this.dialogRef.close(true);
+      }, error: (error) => {
+        if (error.status === 401) {
+          this.loginErrorMessage.set("El nombre de usuario o la contraseña son incorrectos.");
+        }
+      }
+      
     });
   }
 

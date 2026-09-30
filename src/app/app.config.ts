@@ -5,13 +5,14 @@ import { routes } from './app.routes';
 /* provideAnimationAsync aparece como deprecado, aunque se puede seguir usando */
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 /* No importamos whenFetch porque en angular22 ya es el backend predeterminado de HttpClient y no hace falta */
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { authInterceptor } from './core/middleware/auth.interceptor'
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideBrowserGlobalErrorListeners(),
     provideRouter(routes),
     provideAnimationsAsync(),
-    provideHttpClient()
+    provideHttpClient(withInterceptors([authInterceptor]))
   ]
 };

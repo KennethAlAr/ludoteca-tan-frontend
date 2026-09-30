@@ -20,12 +20,14 @@
         <ng-container matColumnDef="action">
             <mat-header-cell *matHeaderCellDef></mat-header-cell>
             <mat-cell *matCellDef="let element">
-                <button mat-icon-button color="primary" (click)="editAuthor(element)">
-                    <mat-icon>edit</mat-icon>
-                </button>
-                <button mat-icon-button (click)="deleteAuthor(element)">
-                    <mat-icon class="clear-icon">clear</mat-icon>
-                </button>
+                @if (loginService.isAdmin()){
+                    <button mat-icon-button color="primary" (click)="editAuthor(element)">
+                        <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button (click)="deleteAuthor(element)">
+                        <mat-icon class="clear-icon">clear</mat-icon>
+                    </button>
+                }
             </mat-cell>
         </ng-container>
 
@@ -35,7 +37,9 @@
 
     <mat-paginator (page)="loadPage($event)" [pageSizeOptions]="[5, 10, 20]" [pageIndex]="pageNumber" [pageSize]="pageSize" [length]="totalElements" showFirstLastButtons></mat-paginator>
 
-    <div class="buttons">
-        <button mat-flat-button color="primary" (click)="createAuthor()">Nuevo autor</button> 
-    </div>   
+    @if(loginService.isAdmin()) {
+        <div class="buttons">
+            <button mat-flat-button color="primary" (click)="createAuthor()">Nuevo autor</button> 
+        </div>
+    } 
 </div>

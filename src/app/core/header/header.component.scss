@@ -47,15 +47,29 @@
         }
     }
 
-    .header_login {
-      font-size: 16px;
-      cursor: pointer;
-      .mat-icon {
-          vertical-align: sub;
-      }
-  }
+    .header_user {
+		font-size: 16px;
+		.mat-icon {
+			vertical-align: sub;
+		}
+		display: flex;
+		flex-direction: row;
+		gap: 20px;
+    }
 
     .header_login:hover {
         color: grey;
+    }
+
+    .header_login {
+        cursor: pointer;
+    }
+
+    .buttons {
+      text-align: right;
+
+      button {
+          margin-left: 10px;
+      }
     }
 }

@@ -12,9 +12,13 @@
             <mat-label>Contraseña</mat-label>
             <input type="password" matInput placeholder="Contraseña" [(ngModel)]="password" name="password" required>
             <mat-error>La contraseña no puede estar vacía</mat-error>
-        </mat-form-field>
+           </mat-form-field>
     </form>
-
+    
+    @if (loginErrorMessage()) {
+        <div class="custom-error">{{loginErrorMessage()}}</div>
+    }
+    
     <div class="buttons">
         <button mat-stroked-button (click)="onClose()">Cerrar</button>
         <button mat-flat-button color="primary" (click)="onLogin()">Log in</button>

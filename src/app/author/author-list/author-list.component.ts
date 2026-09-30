@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, signal, inject } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { LoginService } from '../../core/login/login.service'
 
 @Component({
   selector: 'app-author-list',
@@ -26,6 +27,8 @@ export class AuthorListComponent implements OnInit {
 
   dataSource = new MatTableDataSource<Author>();
   displayedColumns: string[] = ['id', 'name', 'nationality', 'action'];
+
+  protected readonly loginService = inject(LoginService);
 
   constructor(private authorService: AuthorService, public dialog: MatDialog) {}
 
