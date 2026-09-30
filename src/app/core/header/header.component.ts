@@ -1,8 +1,12 @@
 import {CommonModule} from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
+import { LoginComponent } from '../login/login/login.component';
+import { LoginService } from '../login/login.service';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-header',
@@ -11,11 +15,24 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     CommonModule,
     RouterModule,
     MatToolbarModule,
-    MatIconModule
+    MatIconModule,
+    MatDialogModule,
+    MatButtonModule
   ],
   styleUrl: './header.component.scss',
   templateUrl: './header.component.html',
 })
 export class HeaderComponent {
-  
+  protected readonly loginService = inject(LoginService);
+  protected readonly dialog = inject(MatDialog);
+
+  login() {
+    const dialogRef = this.dialog.open(LoginComponent);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.loginService.updateAuthState();
+    this.loginService.updateUserName();
+  }
 }

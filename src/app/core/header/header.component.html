@@ -24,10 +24,18 @@
                     <a routerLink="/reservations" routerLinkActive="active">Reservas</a>
                 </div>
             </div>
-
-            <div class="header_login">
-                <mat-icon>account_circle</mat-icon> Sign in
-            </div>
+            
+            @if (loginService.isAdmin()) {
+                <div class="header_user">
+                    <div>Usuario {{loginService.getUserName()}}</div>
+                    <div class="header_login" (click)="logout()"><mat-icon>account_circle</mat-icon> Log out</div>
+                </div>
+            } @else {
+                <div class="header_user">
+                    <div>No estás logueado ¡Conéctate!</div>
+                    <div class="header_login" (click)="login()"><mat-icon>account_circle</mat-icon> Log in</div>
+                </div>
+            }            
         </div>
     </mat-toolbar-row>
 </mat-toolbar>

@@ -1,0 +1,27 @@
+.container {
+    min-width: 350px;
+    max-width: 500px;
+    padding: 20px;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        margin-bottom:20px;
+    }
+
+    .buttons {
+      text-align: right;
+
+      button {
+          margin-left: 10px;
+      }
+    }
+    
+    .custom-error {
+        color: var(--mat-sys-error);
+        font-size: 12px;
+        margin-top: -16px;
+        margin-bottom: 16px;
+        padding-left: 16px;
+    }
+}
